@@ -1,8 +1,30 @@
-# 论文查重（Paper Plagiarism Checker）· Java / JDK 17
+# 论文查重（Paper Plagiarism Checker）· 作业仓库
 
+本仓库为「高级软件工程」第一次个人编程作业（论文查重）的代码仓库。
 
-给定「原文」与在其基础上经过**增、删、改**得到的「抄袭版」，计算并输出两者的重复率
-（浮点型，保留两位小数）。
+- **学号**：3124004444
+- **语言 / 环境**：Java（JDK 17）
+- **项目源码**：[`3124004444/`](3124004444)
+- **可执行程序**：`3124004444/main.jar`（同时发布在仓库 **Releases**：`v1.0`）
+
+## 仓库结构
+
+```text
+.
+├── .gitignore          # 忽略编译产物等
+├── README.md           # 本文件（仓库说明）
+└── 3124004444/         # 学号文件夹：完整项目
+    ├── src/plagiarism/ # 源码
+    ├── test/plagiarism/# JUnit 5 单元测试
+    ├── lib/            # 依赖 jar（jieba / junit / jacoco）
+    ├── main.jar        # 已编译可执行 jar
+    ├── samples/        # 样例数据
+    ├── performance/    # 性能分析脚本与性能图
+    ├── PSP.md          # PSP 工时表
+    ├── REPORT.md       # 博客正文
+    ├── README.md       # 项目详细说明
+    └── build.sh / build.bat / test.sh / test.bat
+```
 
 ## 运行方式
 
@@ -10,78 +32,23 @@
 java -jar main.jar [原文文件] [抄袭版论文的文件] [答案文件]
 ```
 
-参数为绝对路径、以空格分隔、路径中不含空格，例如：
+例如：
 
 ```bat
 java -jar main.jar C:\tests\orig.txt C:\tests\orig_add.txt C:\tests\ans.txt
 ```
 
-答案文件内容形如 `95.60`（重复率百分比，两位小数）。
+答案文件内容为重复率（浮点型，精确到小数点后两位），例如 `95.59`。
 
-## 环境要求
-
-- **JDK 17**（`javac`/`java`/`jar`）。构建脚本以 `--release 17` 编译，产物字节码兼容 JDK 17。
-- 依赖 `lib/jieba-analysis.jar`（中文分词，词典打包在 jar 内，**运行期不联网**）。
-
-## 目录结构
-
-```text
-.
-├── src/plagiarism/                 # 源码（package plagiarism）
-│   ├── Main.java                   # 入口：解析参数 → 读取 → 计算 → 写出
-│   ├── exceptions/                 # PlagiarismException + 3 个具体异常
-│   ├── io/FileIO.java              # 文件读写（UTF-8，异常转换）
-│   ├── seg/Tokenizer.java          # 中文分词（jieba 优先，2-gram 降级）
-│   └── sim/CosineSimilarity.java   # 词频向量 + 余弦相似度
-├── test/plagiarism/                # JUnit 5 单元测试（29 个用例）
-├── lib/                            # 依赖 jar：jieba / junit / jacoco
-├── manifest.txt                    # jar 清单（Main-Class + Class-Path）
-├── performance/                    # 性能分析：Profile.java / timing.csv / 分析图
-├── samples/                        # 自建样例（orig / add / del / dis / rep）
-├── main.jar                        # 已编译的可执行 jar（发布到 Releases）
-├── build.bat / build.sh            # 编译打包脚本
-├── test.bat / test.sh              # 单元测试 + JaCoCo 覆盖率脚本
-├── checkstyle.xml                  # 代码规范检查配置（IDE 可选）
-├── PSP.md / REPORT.md              # PSP 工时表 / 博客正文
-└── README.md
-```
-
-## 构建
+## 构建与测试
 
 ```bat
-:: Windows
+:: 编译打包（产出 main.jar），在学号文件夹内执行
+cd 3124004444
 build.bat
 
-
-脚本执行：`javac --release 17 -encoding UTF-8 -Xlint:all -Werror` 编译全部源码，并用 `jar` 打包出
-`main.jar`。其中 `-Xlint:all -Werror` 表示**把编译器警告当作错误**，确保**零警告**通过。
-
-## 测试与代码质量
-
-```bat
-:: 单元测试 + 分支覆盖率（JUnit5 + JaCoCo）
+:: 运行单元测试并生成 JaCoCo 覆盖率报告
 test.bat
 ```
 
-- 单元测试：`java -jar lib/junit-platform-console-standalone.jar ...`（详见脚本）
-- 覆盖率报告：`build/coverage-report/index.html`
-- 代码质量：`javac --release 17 -Xlint:all -Werror`（0 警告）；`checkstyle.xml` 供 IDE 辅助检查。
-
-## 性能分析
-
-```bat
-:: 1) 生成分阶段耗时数据与 JFR 记录
-javac -encoding UTF-8 -cp "out;lib/jieba-analysis.jar" -d build/perf performance/Profile.java
-java -XX:StartFlightRecording=filename=performance/perf.jfr,settings=profile ^
-     -cp "out;build/perf;lib/jieba-analysis.jar" perf.Profile
-
-:: 2) 由 timing.csv 绘制性能分析图（需 Python + matplotlib）
-python performance/plot_perf.py
-```
-
-## 算法
-
-词频向量的**余弦相似度**：`sim = (A·B) / (|A|·|B|)`，重复率 `= sim × 100`。
-对词序不敏感、对增删词稳健，适合检测抄袭改写的文本。详见 [REPORT.md](REPORT.md)。
-
-当前结果：**单元测试 29/29 通过 · 整体覆盖率约 91%（分支约 83%）· javac 零警告 · 单次运行约 0.55s**。
+> 详细的设计说明、性能改进、单元测试与异常处理见 [`3124004444/REPORT.md`](3124004444/REPORT.md)。
