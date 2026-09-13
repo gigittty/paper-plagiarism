@@ -9,7 +9,7 @@ venv/
 __pycache__/
 
 # 运行生成的答案文件
-samples/ans_*.txt
+ans_*.txt
 
 # 覆盖率 / 测试产物
 *.exec
