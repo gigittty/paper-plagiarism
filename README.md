@@ -1,8 +1,5 @@
 # 论文查重（Paper Plagiarism Checker）· Java / JDK 17
 
-> **注意**：本项目文件夹即**学号文件夹 `3124004444`**，请直接放入 GitHub 仓库根目录，例如
-> `https://github.com/<用户名>/<仓库名>/tree/main/3124004444`，并在博客正文首行给出该链接。
-> 编译好的 `main.jar` 需一并上传到仓库的 **Releases**。
 
 给定「原文」与在其基础上经过**增、删、改**得到的「抄袭版」，计算并输出两者的重复率
 （浮点型，保留两位小数）。
@@ -20,9 +17,6 @@ java -jar main.jar C:\tests\orig.txt C:\tests\orig_add.txt C:\tests\ans.txt
 ```
 
 答案文件内容形如 `95.60`（重复率百分比，两位小数）。
-
-> 若班级标准答案采用**比例形式**（`0.96`），把 `src/plagiarism/Main.java` 中的
-> `RATE_SCALE = 100.0` 改为 `1.0`，重新执行 `build.bat` 即可。
 
 ## 环境要求
 
@@ -58,9 +52,6 @@ java -jar main.jar C:\tests\orig.txt C:\tests\orig_add.txt C:\tests\ans.txt
 :: Windows
 build.bat
 
-:: Linux / macOS / Git Bash
-bash build.sh
-```
 
 脚本执行：`javac --release 17 -encoding UTF-8 -Xlint:all -Werror` 编译全部源码，并用 `jar` 打包出
 `main.jar`。其中 `-Xlint:all -Werror` 表示**把编译器警告当作错误**，确保**零警告**通过。
