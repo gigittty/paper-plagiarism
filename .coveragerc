@@ -1,0 +1,10 @@
+[run]
+branch = True
+source = .
+omit =
+    .venv/*
+    */sitecustomize.py
+    */shim/*
+
+[report]
+show_missing = True
