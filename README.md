@@ -1,7 +1,7 @@
-# 论文查重（Paper Plagiarism Checker）· Java / JDK 11
+# 论文查重（Paper Plagiarism Checker）· Java / JDK 17
 
-> **注意**：请将本项目文件夹重命名为**你的学号**后，放入 GitHub 仓库根目录，例如
-> `https://github.com/<用户名>/<仓库名>/tree/main/<学号>`，并在博客正文首行给出该链接。
+> **注意**：本项目文件夹即**学号文件夹 `3124004444`**，请直接放入 GitHub 仓库根目录，例如
+> `https://github.com/<用户名>/<仓库名>/tree/main/3124004444`，并在博客正文首行给出该链接。
 > 编译好的 `main.jar` 需一并上传到仓库的 **Releases**。
 
 给定「原文」与在其基础上经过**增、删、改**得到的「抄袭版」，计算并输出两者的重复率
@@ -26,7 +26,7 @@ java -jar main.jar C:\tests\orig.txt C:\tests\orig_add.txt C:\tests\ans.txt
 
 ## 环境要求
 
-- **JDK 11**（`javac`/`java`/`jar`）。构建脚本以 `--release 11` 编译，产物字节码兼容 JDK 11。
+- **JDK 17**（`javac`/`java`/`jar`）。构建脚本以 `--release 17` 编译，产物字节码兼容 JDK 17。
 - 依赖 `lib/jieba-analysis.jar`（中文分词，词典打包在 jar 内，**运行期不联网**）。
 
 ## 目录结构
@@ -62,7 +62,7 @@ build.bat
 bash build.sh
 ```
 
-脚本执行：`javac --release 11 -encoding UTF-8 -Xlint:all -Werror` 编译全部源码，并用 `jar` 打包出
+脚本执行：`javac --release 17 -encoding UTF-8 -Xlint:all -Werror` 编译全部源码，并用 `jar` 打包出
 `main.jar`。其中 `-Xlint:all -Werror` 表示**把编译器警告当作错误**，确保**零警告**通过。
 
 ## 测试与代码质量
@@ -74,7 +74,7 @@ test.bat
 
 - 单元测试：`java -jar lib/junit-platform-console-standalone.jar ...`（详见脚本）
 - 覆盖率报告：`build/coverage-report/index.html`
-- 代码质量：`javac --release 11 -Xlint:all -Werror`（0 警告）；`checkstyle.xml` 供 IDE 辅助检查。
+- 代码质量：`javac --release 17 -Xlint:all -Werror`（0 警告）；`checkstyle.xml` 供 IDE 辅助检查。
 
 ## 性能分析
 

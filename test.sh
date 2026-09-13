@@ -5,7 +5,7 @@ set -euo pipefail
 SEP=";"
 [ -d out ] || bash build.sh
 mkdir -p build/test-classes
-javac -encoding UTF-8 -cp "out${SEP}lib/junit-platform-console-standalone.jar" \
+javac --release 17 -encoding UTF-8 -cp "out${SEP}lib/junit-platform-console-standalone.jar" \
   -d build/test-classes $(find test -name '*.java')
 java -javaagent:lib/org.jacoco.agent-runtime.jar=destfile=build/jacoco.exec \
   -jar lib/junit-platform-console-standalone.jar \
