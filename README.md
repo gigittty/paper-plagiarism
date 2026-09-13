@@ -32,8 +32,8 @@ python main.py C:\tests\orig.txt C:\tests\orig_add.txt C:\tests\ans.txt
 │   ├── tokenizer.py        # 中文分词（jieba / 字符级降级）
 │   └── similarity.py       # 词频向量 + 余弦相似度
 ├── test_plagiarism.py      # 单元测试（unittest，30+ 断言）
+├── analyze.py              # cProfile 性能分析脚本
 ├── performance/
-│   ├── analyze.py          # cProfile 性能分析脚本
 │   └── profile_result.png  # 性能分析图（自动生成）
 ├── samples/                # 自建样例（orig / add / del / dis / rep）
 ├── requirements.txt        # 运行依赖
@@ -58,10 +58,10 @@ coverage report -m
 
 # 静态检查（应无任何警告）
 flake8 .
-pylint plagiarism main.py test_plagiarism.py performance/analyze.py
+pylint plagiarism main.py test_plagiarism.py analyze.py
 
 # 性能分析（生成 performance/profile_result.png）
-python performance/analyze.py
+python analyze.py
 ```
 
 当前结果：**单元测试全部通过 · 覆盖率 97%（核心包 100%）· flake8 0 警告 · pylint 10.00/10**。

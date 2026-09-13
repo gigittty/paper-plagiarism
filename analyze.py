@@ -1,27 +1,23 @@
 """性能分析脚本（开发阶段使用，非程序运行依赖）。
 
 使用 cProfile 对「读取 -> 分词 -> 相似度计算 -> 写出」全流程做性能采样，
-找出消耗最大的函数，并用 matplotlib 生成性能分析图 profile_result.png。
+找出消耗最大的函数，并用 matplotlib 生成性能分析图
+performance/profile_result.png。
 
-运行（已激活 venv）：
-    python performance/analyze.py
+运行（已激活 venv，在项目根目录执行）：
+    python analyze.py
 """
 
 import cProfile
 import pstats
-import sys
 from pathlib import Path
-
-# 将项目根目录加入导入路径，使脚本在任意工作目录下均可导入 plagiarism 包。
-ROOT_DIR = Path(__file__).resolve().parent.parent
-if str(ROOT_DIR) not in sys.path:
-    sys.path.insert(0, str(ROOT_DIR))
 
 from plagiarism import file_io, similarity
 
 HERE = Path(__file__).resolve().parent
-SAMPLES = HERE.parent / "samples"
-CHART_PATH = HERE / "profile_result.png"
+SAMPLES = HERE / "samples"
+CHART_PATH = HERE / "performance" / "profile_result.png"
+ANS_PATH = HERE / "performance" / "profile_ans.txt"
 
 
 def _make_large_text(base, repeat=200):
@@ -39,19 +35,15 @@ def run_pipeline(orig_text, copy_text, ans_path):
 
 def main():  # pylint: disable=too-many-locals
     """运行性能分析并生成图表。"""
-    orig_path = SAMPLES / "orig.txt"
-    copy_path = SAMPLES / "orig_add.txt"
-    ans_path = HERE / "profile_ans.txt"
-
-    base_orig = file_io.read_text(str(orig_path))
-    base_copy = file_io.read_text(str(copy_path))
+    base_orig = file_io.read_text(str(SAMPLES / "orig.txt"))
+    base_copy = file_io.read_text(str(SAMPLES / "orig_add.txt"))
     large_orig = _make_large_text(base_orig)
     large_copy = _make_large_text(base_copy)
 
     profiler = cProfile.Profile()
     profiler.enable()
     for _ in range(5):
-        run_pipeline(large_orig, large_copy, str(ans_path))
+        run_pipeline(large_orig, large_copy, str(ANS_PATH))
     profiler.disable()
 
     stats = pstats.Stats(profiler).sort_stats("cumulative")
@@ -79,13 +71,14 @@ def main():  # pylint: disable=too-many-locals
         ax.set_xlabel("Exclusive time (seconds)")
         ax.set_title("Paper Plagiarism Checker - Performance Profile (Top 12 by tottime)")
         fig.tight_layout()
+        CHART_PATH.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(str(CHART_PATH), dpi=120)
         print(f"性能分析图已生成: {CHART_PATH}")
     except Exception as exc:  # pylint: disable=broad-exception-caught,too-many-locals
         print(f"生成图表失败（文本统计已输出）: {exc}")
 
-    if ans_path.exists():
-        ans_path.unlink()
+    if ANS_PATH.exists():
+        ANS_PATH.unlink()
 
 
 if __name__ == "__main__":

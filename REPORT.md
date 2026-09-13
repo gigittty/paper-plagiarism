@@ -250,6 +250,6 @@ python -m pytest test_plagiarism.py -v
 # 代码质量（应无警告）
 flake8 . && pylint plagiarism main.py
 
-# 性能分析（生成 profile_result.png）
-python performance/analyze.py
+# 性能分析（生成 performance/profile_result.png）
+python analyze.py
 ```
