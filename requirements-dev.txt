@@ -1,6 +1,0 @@
-# 开发 / 测试 / 质量分析与性能分析所需的工具（非程序运行必需）
-pytest>=7.0
-coverage>=7.0
-pylint>=2.0
-flake8>=5.0
-matplotlib>=3.5

@@ -1,0 +1,2 @@
+Main-Class: plagiarism.Main
+Class-Path: lib/jieba-analysis.jar

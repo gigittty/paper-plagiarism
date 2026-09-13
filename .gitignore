@@ -1,15 +1,15 @@
-# Python
-__pycache__/
-*.py[cod]
+# Java 编译产物
+out/
+build/
+*.class
+
+# Python 绘图虚拟环境（仅性能分析用）
 .venv/
 venv/
-
-# 覆盖率 / 测试产物
-.coverage
-.coverage.*
-htmlcov/
-.pytest_cache/
+__pycache__/
 
 # 运行生成的答案文件
 samples/ans_*.txt
-performance/profile_ans.txt
+
+# 覆盖率 / 测试产物
+*.exec
