@@ -1,6 +1,6 @@
 # 论文查重（Java 实现）—— 个人项目博客
 
-> 作业 GitHub 仓库链接：`https://github.com/<用户名>/<仓库名>/tree/main/3124004444`
+> 作业 GitHub 仓库链接：`https://github.com/gigittty/paper-plagiarism/`
 >
 > 语言/环境：**Java（JDK 17）**；入口为打包后的 `main.jar`，运行方式
 > `java -jar main.jar [原文文件] [抄袭版论文的文件] [答案文件]`。
