@@ -1,0 +1,5 @@
+stage,ms
+readFile,0.547
+tokenizeSmallCold,546.860
+tokenizeLarge200x,26.581
+cosine,1.487
