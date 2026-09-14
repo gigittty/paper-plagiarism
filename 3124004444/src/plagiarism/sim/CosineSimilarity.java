@@ -11,7 +11,20 @@ import java.util.Map;
  */
 public final class CosineSimilarity {
 
+    /**
+     * 词频权重指数（次线性缩放）。
+     *
+     * <p>用 {@code tf^0.88} 代替原始词频 {@code tf}：抑制高频常用词对相似度的主导作用，
+     * 使度量对「插字 / 改字」这类字词级改写更敏感，避免与原文被误判为几乎完全一致。</p>
+     */
+    private static final double TF_EXPONENT = 0.88;
+
     private CosineSimilarity() {
+    }
+
+    /** 词频的次线性权重 {@code tf^TF_EXPONENT}。 */
+    private static double weight(final int frequency) {
+        return Math.pow(frequency, TF_EXPONENT);
     }
 
     /**
@@ -45,7 +58,7 @@ public final class CosineSimilarity {
         for (final Map.Entry<String, Integer> entry : smaller.entrySet()) {
             final Integer other = larger.get(entry.getKey());
             if (other != null) {
-                dotProduct += (double) entry.getValue() * other;
+                dotProduct += weight(entry.getValue()) * weight(other);
             }
         }
         return dotProduct / (normA * normB);
@@ -71,7 +84,8 @@ public final class CosineSimilarity {
     private static double vectorNorm(final Map<String, Integer> vector) {
         double sum = 0.0;
         for (final int value : vector.values()) {
-            sum += (double) value * value;
+            final double scaled = weight(value);
+            sum += scaled * scaled;
         }
         return Math.sqrt(sum);
     }
