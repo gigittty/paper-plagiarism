@@ -37,7 +37,7 @@ java -jar main.jar C:\tests\orig.txt C:\tests\orig_add.txt C:\tests\ans.txt
 ├── lib/                            # 依赖 jar：jieba / junit / jacoco
 ├── manifest.txt                    # jar 清单（Main-Class + Class-Path）
 ├── performance/                    # 性能分析：Profile.java / timing.csv / 分析图
-├── samples/                        # 自建样例（orig / add / del / dis / rep）
+├── samples/                        # 课堂样例（orig.txt / orig_0.8_add.txt …）
 ├── main.jar                        # 已编译的可执行 jar（发布到 Releases）
 ├── build.bat / build.sh            # 编译打包脚本
 ├── test.bat / test.sh              # 单元测试 + JaCoCo 覆盖率脚本
@@ -52,6 +52,9 @@ java -jar main.jar C:\tests\orig.txt C:\tests\orig_add.txt C:\tests\ans.txt
 :: Windows
 build.bat
 
+:: Linux / macOS / Git Bash
+bash build.sh
+```
 
 脚本执行：`javac --release 17 -encoding UTF-8 -Xlint:all -Werror` 编译全部源码，并用 `jar` 打包出
 `main.jar`。其中 `-Xlint:all -Werror` 表示**把编译器警告当作错误**，确保**零警告**通过。
@@ -84,4 +87,4 @@ python performance/plot_perf.py
 词频向量的**余弦相似度**：`sim = (A·B) / (|A|·|B|)`，重复率 `= sim × 100`。
 对词序不敏感、对增删词稳健，适合检测抄袭改写的文本。详见 [REPORT.md](REPORT.md)。
 
-当前结果：**单元测试 29/29 通过 · 整体覆盖率约 91%（分支约 83%）· javac 零警告 · 单次运行约 0.55s**。
+当前结果：**单元测试 29 个（27 通过，2 个依赖课堂 del/dis 样例、样例缺失时自动跳过）· 整体覆盖率约 91%（分支约 81%）· javac 零警告 · 单次运行约 0.55s**。

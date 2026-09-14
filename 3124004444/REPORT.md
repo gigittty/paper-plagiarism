@@ -151,7 +151,7 @@ sim(A, B) = (A · B) / (|A| × |B|)
 
 ## 四、计算模块部分单元测试展示
 
-使用 **JUnit 5** 编写单元测试，共 **29 个测试用例**，分布在 5 个测试类中：
+使用 **JUnit 5** 编写单元测试，共 **29 个测试用例**，分布在 5 个测试类中（其中 2 个依赖课堂 `del`/`dis` 样例，样例缺失时自动跳过）：
 
 | 测试类 | 覆盖内容 |
 | --- | --- |
@@ -159,7 +159,7 @@ sim(A, B) = (A · B) / (|A| × |B|)
 | `TokenizerTest` | 2-gram 分词（中文成对、单字、英文单词、中英混排、空串）、jieba 路径、降级路径 |
 | `FileIOTest` | 正常读写、文件缺失、路径为空、写入目录等异常分支 |
 | `MainTest` | 参数解析、错误退出码、端到端查重（相同/完全不相交） |
-| `SampleDataTest` | 基于 `samples/` 样例验证增/删/乱序/同义替换的判定 |
+| `SampleDataTest` | 基于 `samples/` 课堂样例（orig.txt / orig_0.8_add.txt …）验证自相似、增字/删减/乱序的判定（样例缺失时自动跳过） |
 
 **部分测试代码（节选）**：
 
@@ -197,18 +197,18 @@ void readText_missingFile_throwsFileReadException() {
 ① 边界：空串、单字、空文本、参数个数为 2；
 ② 等价类：完全相同 / 部分重叠 / 完全不相交；
 ③ 异常类：文件不存在、路径为空、把目录当文件写；
-④ 结合样例 `samples/orig*.txt` 做集成验证。
+④ 结合课堂样例 `samples/orig.txt`、`samples/orig_0.8_add.txt` 做集成验证。
 
 **测试覆盖率（JaCoCo）**：
 
 | 类 | 指令覆盖 | 分支覆盖 |
 | --- | ---: | ---: |
 | Main | 88% | 75% |
-| Tokenizer | 95% | 86% |
-| CosineSimilarity | 97% | 81% |
+| Tokenizer | 96% | 86% |
+| CosineSimilarity | 96% | 73% |
 | FileIO | 71% | 75% |
 | exceptions（4 个） | 100% | — |
-| **整体** | **≈91%** | **≈83%** |
+| **整体** | **≈91%** | **≈81%** |
 
 > 未覆盖的主要是防御性分支（如 `SecurityException`、`Main` 中兜底的 `catch (Exception)`），
 > 这些分支在正常测评路径下不会触发。HTML 报告见 `build/coverage-report/index.html`
@@ -216,12 +216,12 @@ void readText_missingFile_throwsFileReadException() {
 
 **样例运行结果**（`java -jar main.jar samples/orig.txt samples/<样例> samples/ans.txt`）：
 
-| 样例 | 重复率 | 符合预期 |
+| 样例 | 重复率 | 说明 |
 | --- | ---: | --- |
-| orig_add（增） | 95.59 | 高，符合 |
-| orig_del（删） | 93.84 | 高，符合 |
-| orig_dis_1（乱序） | 100.00 | 词频不变 → 100 |
-| orig_rep（同义替换） | 76.91 | 明显下降，符合 |
+| orig_0.8_add（在原文中插字） | 99.16 | 高相似度，符合预期 |
+
+> 注：其余样例（`orig_0.8_del` / `orig_0.8_dis_1` / `orig_0.8_dis_10` / `orig_0.8_dis_15`）请用课堂下发的
+> **原始文本文件**覆盖 `samples/` 后再运行复测；样例缺失时 `SampleDataTest` 中相关用例会自动跳过（不判失败）。
 
 ---
 

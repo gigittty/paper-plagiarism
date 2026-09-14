@@ -90,6 +90,17 @@ public final class Profile {
         final double reuseAvg = (reuseEnd - reuseStart) / 1e6 / loops;
         final double newAvg = (newEnd - newStart) / 1e6 / loops;
 
+        // ---- 持续 CPU 负载：让 JFR 采集到足够样本，用于定位消耗最大的函数 ----
+        final long cpuStart = System.nanoTime();
+        final long cpuBudgetNs = 4_000_000_000L;
+        int iterations = 0;
+        while (System.nanoTime() - cpuStart < cpuBudgetNs) {
+            final List<String> a = hot.tokenize(bigText);
+            final List<String> b = hot.tokenize(c);
+            CosineSimilarity.cosine(a, b);
+            iterations++;
+        }
+
         final StringBuilder csv = new StringBuilder();
         csv.append("stage,ms\n");
         csv.append(String.format("readFile,%.3f%n", readMs));
@@ -105,6 +116,7 @@ public final class Profile {
         System.out.println("large-input tokenize (ms): " + bigTokenizeMs);
         System.out.println("avg per-pair tokenize: reuse=" + reuseAvg
                 + " ms  new-each-time=" + newAvg + " ms");
+        System.out.println("cpu workload iterations in 4s: " + iterations);
         System.out.println("wrote " + outCsv.toAbsolutePath());
     }
 }
